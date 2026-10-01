@@ -1,0 +1,1 @@
+{"id":"add","prompt":"Implement add(a,b) returning the sum.","tests":"from solution import add\ndef test_add(): assert add(2, 3) == 5","tags":["arithmetic"]}

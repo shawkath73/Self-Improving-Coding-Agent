@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "verified-execution-agent"
+version = "0.1.0"
+description = "Self-improving code agent with verified execution feedback loop"
+requires-python = ">=3.11"
+dependencies = ["fastapi>=0.110", "uvicorn>=0.27", "pydantic>=2.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5"]
+anthropic = ["anthropic>=0.30"]
+gemini = ["google-genai>=1.0"]
+docker = ["docker>=7"]
+postgres = ["psycopg[binary]>=3"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[project.scripts]
+verified-agent = "verified_agent.api:main"
+verified-agent-eval = "verified_agent.evaluation:main"

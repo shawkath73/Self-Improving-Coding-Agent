@@ -1,0 +1,1 @@
+{"id":"fizzbuzz","prompt":"Implement fizzbuzz(n) returning Fizz/Buzz/FizzBuzz or the number.","tests":"from solution import fizzbuzz\ndef test_fb(): assert fizzbuzz(15)=='FizzBuzz'; assert fizzbuzz(2)==2","tags":["logic"]}

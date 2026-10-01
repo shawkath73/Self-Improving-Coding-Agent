@@ -1,0 +1,1 @@
+{"id":"reverse","prompt":"Implement reverse_text(s) returning s backwards.","tests":"from solution import reverse_text\ndef test_reverse(): assert reverse_text('abc') == 'cba'","tags":["strings"]}
