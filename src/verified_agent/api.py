@@ -25,6 +25,11 @@ app.add_middleware(CORSMiddleware, allow_origins=_cors_origins,
 repo = Repository(str(RUN_DB))
 
 
+def _env_flag(name: str, default: bool = False) -> bool:
+    value = os.getenv(name)
+    return default if value is None else value.strip().lower() in {"1", "true", "yes", "on"}
+
+
 @app.get("/")
 def root():
     return {"service": "verified-execution-agent", "status": "ok", "docs": "/docs"}
@@ -56,7 +61,7 @@ def make_orchestrator(config: str = "full_system"):
         raise RuntimeError(
             "Configure GEMINI_API_KEY or ANTHROPIC_API_KEY, or set LLM_PROVIDER explicitly."
         )
-    executor = DockerExecutor() if config == "full_system" and os.getenv("USE_DOCKER") else LocalExecutor()
+    executor = DockerExecutor() if config == "full_system" and _env_flag("USE_DOCKER") else LocalExecutor()
     # Render's container filesystem is not guaranteed to be writable at the
     # project root. Keep local development persistent while using its writable
     # temporary directory when a production database is configured.
@@ -152,7 +157,7 @@ def settings():
             "gemini" if os.getenv("GEMINI_API_KEY") else
             "anthropic" if os.getenv("ANTHROPIC_API_KEY") else "not configured"
         ),
-        "docker_enabled": bool(os.getenv("USE_DOCKER")),
+        "docker_enabled": _env_flag("USE_DOCKER"),
     }
 
 
