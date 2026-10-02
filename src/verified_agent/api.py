@@ -57,7 +57,14 @@ def make_orchestrator(config: str = "full_system"):
             "Configure GEMINI_API_KEY or ANTHROPIC_API_KEY, or set LLM_PROVIDER explicitly."
         )
     executor = DockerExecutor() if config == "full_system" and os.getenv("USE_DOCKER") else LocalExecutor()
-    memory = SQLiteMemory() if config in {"memory", "full_system"} else None
+    # Render's container filesystem is not guaranteed to be writable at the
+    # project root. Keep local development persistent while using its writable
+    # temporary directory when a production database is configured.
+    memory_path = os.getenv(
+        "MEMORY_DB_PATH",
+        "/tmp/verified-agent-memory.db" if os.getenv("DATABASE_URL") else "memory.db",
+    )
+    memory = SQLiteMemory(memory_path) if config in {"memory", "full_system"} else None
     return Orchestrator(
         LLMPlanner(llm),
         LLMCoder(llm),
@@ -91,15 +98,22 @@ def _execute(req, run_id):
                 "successful_code": result.attempts[-1].code,
             })
     except KeyError as exc:
-        _save_run(run_id, {"run_id": run_id, "status": "error", "error": str(exc)})
+        _save_run(
+            run_id,
+            {"run_id": run_id, "status": "error", "task_id": req.task_id, "error": str(exc)},
+        )
     except (ConfigurationError, RuntimeError, ValueError) as exc:
-        _save_run(run_id, {"run_id": run_id, "status": "error", "error": str(exc)})
+        _save_run(
+            run_id,
+            {"run_id": run_id, "status": "error", "task_id": req.task_id, "error": str(exc)},
+        )
     except Exception as exc:  # noqa: BLE001 - worker boundary must persist unexpected failures
         _save_run(
             run_id,
             {
                 "run_id": run_id,
                 "status": "error",
+                "task_id": req.task_id,
                 "error": f"{type(exc).__name__}: {exc}",
             },
         )
