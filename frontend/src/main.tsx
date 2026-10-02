@@ -49,6 +49,21 @@ function StatusIcon({ status }: { status: string }) {
   return <AlertCircle size={20} aria-hidden="true" />;
 }
 
+function RunStatusToast({ run, onSelect, onDismiss }: { run?: Run; onSelect: (run: Run) => void; onDismiss: () => void }) {
+  if (!run) return null;
+  const active = run.status === "queued" || run.status === "running";
+  const label = statusLabel(run.status);
+  return <div className={`run-toast toast-${run.status}`} role="status" aria-live="polite">
+    <div className="toast-icon"><StatusIcon status={run.status} /></div>
+    <div className="toast-copy">
+      <strong>{active ? "Run in progress" : `Run ${label.toLowerCase()}`}</strong>
+      <span>{run.task_id || "Unnamed task"}{active ? " · verification running" : " · view result details"}</span>
+    </div>
+    <button className="toast-action" onClick={() => onSelect(run)}>Inspect</button>
+    {!active && <button className="toast-close" aria-label="Dismiss run status" onClick={onDismiss}><X size={15} /></button>}
+  </div>;
+}
+
 function downloadFile(filename: string, content: string, type = "application/json") {
   const blob = new Blob([content], { type });
   const url = URL.createObjectURL(blob);
@@ -86,6 +101,7 @@ function App() {
   const [modal, setModal] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [dismissedToast, setDismissedToast] = useState<string | null>(null);
 
   const load = async () => {
     setBusy(true); setError("");
@@ -111,7 +127,8 @@ function App() {
   }, [runs]);
 
   const title = nav.find(([id]) => id === view)?.[1] || "Overview";
-  return <div className="app">
+  const latestRun = runs[0];
+  return <><RunStatusToast run={latestRun?.run_id === dismissedToast ? undefined : latestRun} onSelect={setSelected} onDismiss={() => latestRun && setDismissedToast(latestRun.run_id)} /><div className="app">
     <aside className={open ? "sidebar" : "sidebar closed"}>
       <div className="brand"><div className="logo"><Activity size={17} /></div><div><b>VERIFIED</b><small>EXECUTION AGENT</small></div></div>
       <nav>{nav.map(([id, label, Icon]) => <button key={id} className={view === id ? "active" : ""} onClick={() => { setView(id); setSelected(null); }}><Icon size={17} />{label}</button>)}</nav>
@@ -130,7 +147,7 @@ function App() {
       </section>
     </main>
     {modal && createPortal(<RunModal tasks={tasks} onClose={() => setModal(false)} onCreated={async (id) => { setModal(false); const started = await api<Run>(`/runs/${id}`); setSelected(started); await load(); }} />, document.body)}
-  </div>;
+  </div></>;
 }
 
 function Cards({ summary }: { summary: any }) {
