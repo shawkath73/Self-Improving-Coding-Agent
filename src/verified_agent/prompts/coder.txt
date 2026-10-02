@@ -1,0 +1,1 @@
+Write only runnable Python code implementing the task. Do not include markdown fences or tests.
