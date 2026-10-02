@@ -174,8 +174,8 @@ tbody tr:hover { background: rgba(199, 236, 250, .45); cursor: pointer; }
 .detail p { color: #6686a0; font-size: 12px; }.attempt { padding: 13px 0; border-top: 1px solid rgba(100,161,195,.2); }
 .attempt pre { max-height: 180px; overflow: auto; color: #496b85; font: 11px/1.45 ui-monospace, monospace; white-space: pre-wrap; }
 .attempt details { margin-top: 10px; border: 1px solid #bddbea; border-radius: 8px; }.attempt summary { padding: 8px; color: #327ba5; cursor: pointer; }
-.modal-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; overflow: hidden; padding: 18px; background: rgba(31, 78, 105, .35); backdrop-filter: blur(8px); }
-.modal { width: min(500px, 100%); max-height: calc(100vh - 36px); overflow: hidden; padding: 22px 25px; }
+.modal-backdrop { position: fixed !important; inset: 0; z-index: 9999; display: grid; place-items: center; overflow: hidden; padding: 18px; background: rgba(31, 78, 105, .35); backdrop-filter: blur(8px); }
+.modal-backdrop .modal { position: relative; z-index: 10000; display: block; visibility: visible; opacity: 1; width: min(500px, calc(100vw - 36px)); max-height: calc(100vh - 36px); overflow: hidden; padding: 22px 25px; }
 .modal h2 { margin: 5px 0; font-size: 24px; }.modal > p { color: #65849d; font-size: 12px; line-height: 1.5; }
 .modal label, .settings label { display: grid; gap: 6px; margin: 12px 0; color: #4f708c; font-size: 12px; }
 .modal select, .modal input, .settings input { width: 100%; min-height: 42px; padding: 10px 12px; border: 1px solid #a9cfe2; border-radius: 10px; outline: none; color: #173453; background: rgba(255,255,255,.72); }

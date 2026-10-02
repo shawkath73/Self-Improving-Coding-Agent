@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { createRoot } from "react-dom/client";
 import {
   Activity, AlertCircle, BarChart3, Brain, CheckCircle2, CircleDollarSign, Clock3,
@@ -128,7 +129,7 @@ function App() {
         {selected && <RunDetail run={selected} onClose={() => setSelected(null)} />}
       </section>
     </main>
-    {modal && <RunModal tasks={tasks} onClose={() => setModal(false)} onCreated={async (id) => { setModal(false); const started = await api<Run>(`/runs/${id}`); setSelected(started); await load(); }} />}
+    {modal && createPortal(<RunModal tasks={tasks} onClose={() => setModal(false)} onCreated={async (id) => { setModal(false); const started = await api<Run>(`/runs/${id}`); setSelected(started); await load(); }} />, document.body)}
   </div>;
 }
 
