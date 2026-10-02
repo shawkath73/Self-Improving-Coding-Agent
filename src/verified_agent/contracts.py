@@ -12,7 +12,7 @@ class BenchmarkTask(BaseModel):
     category: str = "general"
     language: str = "python"
     tests: str
-    timeout_seconds: float = 5
+    timeout_seconds: float = 15
     tags: list[str] = Field(default_factory=list)
 
 

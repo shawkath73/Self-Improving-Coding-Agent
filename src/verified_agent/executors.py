@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 import tempfile
@@ -23,6 +24,7 @@ class LocalExecutor:
                 proc = subprocess.run(
                     [sys.executable, "-m", "pytest", "-q", "test_solution.py"],
                     cwd=p,
+                    env={**os.environ, "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"},
                     capture_output=True,
                     text=True,
                     timeout=task.timeout_seconds,
