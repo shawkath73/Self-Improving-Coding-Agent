@@ -174,8 +174,8 @@ tbody tr:hover { background: rgba(199, 236, 250, .45); cursor: pointer; }
 .detail p { color: #6686a0; font-size: 12px; }.attempt { padding: 13px 0; border-top: 1px solid rgba(100,161,195,.2); }
 .attempt pre { max-height: 180px; overflow: auto; color: #496b85; font: 11px/1.45 ui-monospace, monospace; white-space: pre-wrap; }
 .attempt details { margin-top: 10px; border: 1px solid #bddbea; border-radius: 8px; }.attempt summary { padding: 8px; color: #327ba5; cursor: pointer; }
-.modal-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 20px; background: rgba(31, 78, 105, .35); backdrop-filter: blur(8px); }
-.modal { width: min(520px, 100%); max-height: calc(100vh - 40px); overflow: auto; padding: 26px; }
+.modal-backdrop { position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: clamp(20px, 8vh, 72px) 20px 32px; background: rgba(31, 78, 105, .35); backdrop-filter: blur(8px); }
+.modal { width: min(520px, 100%); max-height: none; overflow: visible; padding: 26px; }
 .modal h2 { margin: 5px 0; font-size: 24px; }.modal > p { color: #65849d; font-size: 12px; line-height: 1.5; }
 .modal label, .settings label { display: grid; gap: 8px; margin: 17px 0; color: #4f708c; font-size: 12px; }
 .modal select, .modal input, .settings input { width: 100%; min-height: 42px; padding: 10px 12px; border: 1px solid #a9cfe2; border-radius: 10px; outline: none; color: #173453; background: rgba(255,255,255,.72); }
@@ -184,16 +184,24 @@ tbody tr:hover { background: rgba(199, 236, 250, .45); cursor: pointer; }
 .settings { max-width: 700px; }.settings input { color: #527390; }
 .spin { animation: spin 1s linear infinite; }@keyframes spin { to { transform: rotate(360deg); } }
 .welcome-actions, .panel-actions { display: flex; align-items: center; gap: 9px; }
+.guide-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.guide-card { min-height: 190px; }
+.guide-card > svg { color: #148fc7; margin-bottom: 13px; }
+.guide-card h3 { margin-bottom: 10px; font-size: 17px; }
+.guide-card p, .guide-card li { color: #587894; font-size: 13px; line-height: 1.65; }
+.guide-card p { margin: 8px 0; }
+.guide-card ol { margin: 8px 0 0; padding-left: 20px; }
+.guide-card code { padding: 2px 5px; border-radius: 5px; color: #167aa9; background: #dff2fa; }
 
 @media (max-width: 900px) {
   .app { width: 100%; min-height: 100vh; margin: 0; border-radius: 0; }
   .sidebar { min-height: 72px; padding: 14px 18px; overflow-x: auto; }
   .brand { margin-right: 18px; }.brand small { display: none; }
   .sidebar nav button { padding: 8px 12px; font-size: 11px; }
-  .content { padding: 28px 22px 44px; }.dashboard-grid { grid-template-columns: 1fr; }.side-stack { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; }
+  .content { padding: 28px 22px 44px; }.dashboard-grid { grid-template-columns: 1fr; }.side-stack { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; }.guide-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
   .sidebar { align-items: flex-start; }.sidebar nav { gap: 3px; }.sidebar nav button { padding: 8px; font-size: 0; }.sidebar nav button svg { width: 17px; height: 17px; }
-  .content { padding: 22px 14px 34px; }.welcome { flex-direction: column; align-items: flex-start; }.welcome h2 { font-size: 24px; }
+  .content { padding: 22px 14px 34px; }.welcome { flex-direction: column; align-items: flex-start; }.welcome h2 { font-size: 24px; }.modal-backdrop { padding: 14px 12px 24px; }.modal { padding: 21px; }
   .ticker-grid, .side-stack { grid-template-columns: 1fr; }.result-card { align-items: flex-start; flex-wrap: wrap; }.result-main { min-width: calc(100% - 60px); }.result-meta { flex-direction: row; width: 100%; }
 }
