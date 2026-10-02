@@ -1,0 +1,14 @@
+{"version":"1.0","tasks":[
+{"id":"add","split":"train","category":"arithmetic","prompt":"Implement add(a,b) returning the sum.","tests":"from solution import add\ndef test_add(): assert add(2,3)==5"},
+{"id":"reverse","split":"train","category":"strings","prompt":"Implement reverse_text(s).","tests":"from solution import reverse_text\ndef test_reverse(): assert reverse_text('abc')=='cba'"},
+{"id":"fizzbuzz","split":"train","category":"logic","prompt":"Implement fizzbuzz(n).","tests":"from solution import fizzbuzz\ndef test_fb(): assert fizzbuzz(15)=='FizzBuzz'; assert fizzbuzz(2)==2"},
+{"id":"clamp","split":"train","category":"arithmetic","prompt":"Implement clamp(value, low, high).","tests":"from solution import clamp\ndef test_clamp(): assert clamp(5,0,3)==3; assert clamp(-1,0,3)==0"},
+{"id":"is_palindrome","split":"validation","category":"strings","prompt":"Implement is_palindrome(s), ignoring case.","tests":"from solution import is_palindrome\ndef test_pal(): assert is_palindrome('Racecar'); assert not is_palindrome('hello')"},
+{"id":"factorial","split":"validation","category":"recursion","prompt":"Implement factorial(n) for nonnegative integers.","tests":"from solution import factorial\ndef test_fact(): assert factorial(0)==1; assert factorial(5)==120"},
+{"id":"word_count","split":"validation","category":"collections","prompt":"Implement word_count(text) returning a word frequency dict.","tests":"from solution import word_count\ndef test_words(): assert word_count('a b a')=={'a':2,'b':1}"},
+{"id":"unique_sorted","split":"validation","category":"collections","prompt":"Implement unique_sorted(values).","tests":"from solution import unique_sorted\ndef test_unique(): assert unique_sorted([3,1,3,2])==[1,2,3]"},
+{"id":"rotate","split":"test","category":"lists","prompt":"Implement rotate(values,k) left-rotating a list.","tests":"from solution import rotate\ndef test_rotate(): assert rotate([1,2,3,4],1)==[2,3,4,1]"},
+{"id":"safe_divide","split":"test","category":"arithmetic","prompt":"Implement safe_divide(a,b), returning None on zero divisor.","tests":"from solution import safe_divide\ndef test_div(): assert safe_divide(6,2)==3; assert safe_divide(1,0) is None"},
+{"id":"flatten","split":"test","category":"lists","prompt":"Implement flatten one level of nested lists.","tests":"from solution import flatten\ndef test_flat(): assert flatten([[1,2],[3],[]])==[1,2,3]"},
+{"id":"title_words","split":"test","category":"strings","prompt":"Implement title_words(text), title-casing whitespace-separated words.","tests":"from solution import title_words\ndef test_title(): assert title_words('hello world')=='Hello World'"}
+]}

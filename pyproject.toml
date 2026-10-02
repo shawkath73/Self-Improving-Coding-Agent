@@ -26,3 +26,6 @@ line-length = 100
 [project.scripts]
 verified-agent = "verified_agent.api:main"
 verified-agent-eval = "verified_agent.evaluation:main"
+
+[tool.setuptools.package-data]
+verified_agent = ["data/*.json"]

@@ -25,6 +25,11 @@ app.add_middleware(CORSMiddleware, allow_origins=_cors_origins,
 repo = Repository(str(RUN_DB))
 
 
+@app.get("/")
+def root():
+    return {"service": "verified-execution-agent", "status": "ok", "docs": "/docs"}
+
+
 def _save_run(run_id, value):
     repo.save_run(run_id, value)
 
