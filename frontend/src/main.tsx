@@ -64,6 +64,20 @@ function RunStatusToast({ run, onSelect, onDismiss }: { run?: Run; onSelect: (ru
   </div>;
 }
 
+function LoadingScreen({ error, onRetry }: { error?: string; onRetry?: () => void }) {
+  return <main className="loading-screen" aria-live="polite">
+    <div className="loading-card">
+      <div className="loading-logo"><Activity size={25} /></div>
+      <div className="loading-orbit"><span /><span /><span /></div>
+      <div className="eyebrow">{error ? "CONNECTION INTERRUPTED" : "SECURE WORKSPACE"}</div>
+      <h1>{error ? "Unable to connect" : "Connecting your workspace"}</h1>
+      <p>{error || "Checking the API, database, benchmarks, and agent services before opening the dashboard."}</p>
+      {!error && <div className="loading-steps"><span className="complete"><CheckCircle2 size={14} /> API</span><span><LoaderCircle size={14} className="spin" /> Database</span><span><LoaderCircle size={14} className="spin" /> Agent</span></div>}
+      {error && onRetry && <button className="primary" onClick={onRetry}><RefreshCw size={15} /> Try again</button>}
+    </div>
+  </main>;
+}
+
 function downloadFile(filename: string, content: string, type = "application/json") {
   const blob = new Blob([content], { type });
   const url = URL.createObjectURL(blob);
@@ -101,20 +115,22 @@ function App() {
   const [modal, setModal] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [initializing, setInitializing] = useState(true);
   const [dismissedToast, setDismissedToast] = useState<string | null>(null);
 
   const load = async () => {
     setBusy(true); setError("");
     try {
-      const [s, r, t, e, m] = await Promise.all([
+      const [s, r, _runtime, t, e, m] = await Promise.all([
         api<any>("/dashboard/summary"), api<any>("/runs?limit=50"),
+        api<any>("/settings"),
         api<Task[]>("/benchmarks/tasks"), api<any>("/experiments/ablations"), api<any>("/memory"),
       ]);
       setSummary(s); setRuns(r.runs || []); setTasks(t || []);
       setExperiments(Array.isArray(e) ? e : Object.entries(e || {}).map(([name, result]) => ({ name, result })));
       setMemory(m || []);
     } catch (err) { setError(err instanceof Error ? err.message : "Unable to load dashboard data."); }
-    finally { setBusy(false); }
+    finally { setBusy(false); setInitializing(false); }
   };
   useEffect(() => { load(); }, []);
   useEffect(() => {
@@ -132,6 +148,7 @@ function App() {
     setSelected(run);
     window.setTimeout(() => document.getElementById("run-detail")?.scrollIntoView({ behavior: "smooth", block: "center" }), 0);
   };
+  if (initializing) return <LoadingScreen error={error || undefined} onRetry={error ? () => { setInitializing(true); load(); } : undefined} />;
   return <><RunStatusToast run={latestRun?.run_id === dismissedToast ? undefined : latestRun} onSelect={inspectRun} onDismiss={() => latestRun && setDismissedToast(latestRun.run_id)} /><div className="app">
     <aside className={open ? "sidebar" : "sidebar closed"}>
       <div className="brand"><div className="logo"><Activity size={17} /></div><div><b>VERIFIED</b><small>EXECUTION AGENT</small></div></div>
